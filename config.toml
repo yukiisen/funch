@@ -1,0 +1,18 @@
+[[games]]
+  name = "balatro"
+  displayname = "Balatro"
+  genres = ["Strategy", "Casual", "Indie"]
+  platforms = ["iOS", "PlayStation 5", "PC", "Nintendo Switch"]
+  stores = ["Steam"]
+  website = "https://www.playbalatro.com/"
+  launcher = "love"
+  args = []
+  executable = "/home/yuki/Games/Balatro.love"
+  playtime = 0
+  installed = 2026-05-09T21:38:27.699164826+01:00
+
+[Config]
+  RPCEnabled = true
+  RPCShowPlaytime = true
+  Daemonize = false
+  APIKey = "2919f04baf3541709f16090460185ee2"
