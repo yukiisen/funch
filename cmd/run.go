@@ -180,8 +180,11 @@ func startRPC(game *Game, showTime bool) error {
 		State:      state,
 		Details:    "Playing " + game.DisplayName,
 
-		LargeImage: game.Launcher,
+		LargeImage: "funch",
 		LargeText:  game.DisplayName,
+
+		SmallImage: game.Launcher,
+		SmallText:  "Via " + game.Launcher,
 
 		Timestamps: &client.Timestamps{
 			Start: &startTime,
