@@ -20,7 +20,7 @@ A small tool to manage locally installed games.
 
 Simply do:
 ```
-go install github.com/yukiisen/funch@v0.1.0-beta
+go install github.com/yukiisen/funch@v0.1.0
 ```
 
 ## Usage
