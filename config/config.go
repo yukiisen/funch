@@ -4,6 +4,7 @@ import (
 	"github.com/yukiisen/funch/api"
 	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/BurntSushi/toml"
 )
@@ -22,13 +23,24 @@ type Config struct {
 	FuzzyFinderCmd []string
 }
 
-const configDir = "."
+func configDir() string {
+	if xdg := os.Getenv("XDG_CONFIG_HOME"); xdg != "" {
+		return filepath.Join(xdg, "funch")
+	}
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "."
+	}
+
+	return filepath.Join(home, ".config", "funch")
+}
 
 func InitLogging (name string) (*os.File, error) {
-	err := os.MkdirAll(path.Join(configDir, "logs"), 0755)
+	err := os.MkdirAll(path.Join(configDir(), "logs"), 0755)
 	if err != nil { return nil, err }
 	
-	return os.Create(path.Join(configDir, "logs", name))
+	return os.Create(path.Join(configDir(), "logs", name))
 }
 
 func createLibrary() Library {
@@ -44,6 +56,8 @@ func createLibrary() Library {
 		Config: config,
 	}
 
+	if err := os.MkdirAll(configDir(), 0755); err != nil { panic(err) }
+
 	UpdateLibrary(lib)
 
 	return lib
@@ -52,19 +66,19 @@ func createLibrary() Library {
 func LoadLibrary() Library {
 	var lib Library
 
-	_, e := os.Stat(path.Join(configDir , "config.toml"))
+	_, e := os.Stat(path.Join(configDir() , "config.toml"))
 	if e != nil {
 		return createLibrary()
 	}
 
-	_, err := toml.DecodeFile(path.Join(configDir , "config.toml"), &lib)
+	_, err := toml.DecodeFile(path.Join(configDir() , "config.toml"), &lib)
 	if err != nil { panic(err) }
 
 	return lib
 }
 
 func UpdateLibrary(lib Library) error {
-	file, err := os.Create(path.Join(configDir , "config.toml"));
+	file, err := os.Create(path.Join(configDir() , "config.toml"));
 	if err != nil { return err }
 	defer file.Close()
 
