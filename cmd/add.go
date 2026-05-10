@@ -14,6 +14,8 @@ import (
 
 var AddCmd = &cobra.Command {
 	Use: "add <name> <executable>",
+	Short: "Add a game",
+	Long:  "Adds a new game entry to the library using a name and executable path. The game can later be launched or configured.",
 	Args: cobra.ExactArgs(2),
 	RunE: add,
 }
@@ -53,6 +55,8 @@ func add(cmd *cobra.Command, args []string) error {
 	// I won't return the err directly becuase it might be confusing later
 	err = config.UpdateLibrary(lib);
 	if err != nil { return err }
+
+	fmt.Println("Game Added Successfully")
 
 	return nil
 }

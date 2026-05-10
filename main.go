@@ -10,7 +10,13 @@ func main() {
 		Use: "funch",
 	}
 
+	cmd.InitListCmd()
+	cmd.InitRunCmd()
+
 	rootCmd.AddCommand(cmd.RunCmd)
 	rootCmd.AddCommand(cmd.AddCmd)
+	rootCmd.AddCommand(cmd.SetCmd)
+	rootCmd.AddCommand(cmd.ListCmd)
+	rootCmd.AddCommand(cmd.InfoCmd)
 	rootCmd.Execute()
 }

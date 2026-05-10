@@ -3,6 +3,8 @@ package config
 import (
 	"funch/api"
 	"os"
+	"path"
+
 	"github.com/BurntSushi/toml"
 )
 
@@ -17,15 +19,24 @@ type Config struct {
 	RPCShowPlaytime bool
 	Daemonize bool
 	APIKey string
+	FuzzyFinderCmd []string
 }
 
-const configPath = "./config.toml"
+const configDir = "."
+
+func InitLogging (name string) (*os.File, error) {
+	err := os.MkdirAll(path.Join(configDir, "logs"), 0755)
+	if err != nil { return nil, err }
+	
+	return os.Create(path.Join(configDir, "logs", name))
+}
 
 func createLibrary() Library {
 	config := Config {
 		RPCEnabled: true,
 		RPCShowPlaytime: true,
 		Daemonize: false,
+		FuzzyFinderCmd: []string{ "bash", "-c", "false" },
 	}
 
 	lib := Library {
@@ -41,19 +52,19 @@ func createLibrary() Library {
 func LoadLibrary() Library {
 	var lib Library
 
-	_, e := os.Stat(configPath)
+	_, e := os.Stat(path.Join(configDir , "config.toml"))
 	if e != nil {
 		return createLibrary()
 	}
 
-	_, err := toml.DecodeFile(configPath, &lib)
+	_, err := toml.DecodeFile(path.Join(configDir , "config.toml"), &lib)
 	if err != nil { panic(err) }
 
 	return lib
 }
 
 func UpdateLibrary(lib Library) error {
-	file, err := os.Create(configPath);
+	file, err := os.Create(path.Join(configDir , "config.toml"));
 	if err != nil { return err }
 	defer file.Close()
 

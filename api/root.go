@@ -12,7 +12,7 @@ type Game struct {
 	Launcher       string    `toml:"launcher"`
 	Args           []string  `toml:"args"`
 	Executable     string    `toml:"executable"`
-	Playtime       int       `toml:"playtime"`
+	Playtime       int64     `toml:"playtime"`
 	Installed      time.Time `toml:"installed"`
 }
 
