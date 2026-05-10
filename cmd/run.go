@@ -30,9 +30,9 @@ var RunCmd = &cobra.Command {
 }
 
 func InitRunCmd() {
-	RunCmd.Flags().Bool("no-rpc", false, "Force Disable Discord RPC")
-	RunCmd.Flags().Bool("daemon", false, "Run In Background")
-	RunCmd.Flags().Bool("attached", false, "Run In Background")
+	RunCmd.Flags().Bool("no-rpc", false, "Force disable discord RPC")
+	RunCmd.Flags().Bool("attached", false, "Don't run in background")
+	RunCmd.Flags().BoolP("daemon", "d", false, "Run in background")
 }
 
 const RPCAppID string = "1355243267494514903"
