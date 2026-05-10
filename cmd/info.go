@@ -3,7 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"funch/config"
+	"github.com/yukiisen/funch/config"
 	"os"
 	"text/tabwriter"
 	"strconv"

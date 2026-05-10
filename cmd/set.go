@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"errors"
-	"funch/config"
+	"github.com/yukiisen/funch/config"
 	"reflect"
 	"strconv"
 	"github.com/spf13/cobra"

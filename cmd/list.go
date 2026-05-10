@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 	"fmt"
-	"funch/config"
+	"github.com/yukiisen/funch/config"
 	"text/tabwriter"
 	"github.com/spf13/cobra"
 )

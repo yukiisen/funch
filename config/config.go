@@ -1,7 +1,7 @@
 package config
 
 import (
-	"funch/api"
+	"github.com/yukiisen/funch/api"
 	"os"
 	"path"
 

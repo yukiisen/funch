@@ -3,8 +3,8 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"funch/api"
-	"funch/config"
+	"github.com/yukiisen/funch/api"
+	"github.com/yukiisen/funch/config"
 	"os"
 	"path/filepath"
 	"time"

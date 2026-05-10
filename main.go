@@ -1,7 +1,7 @@
 package main
 
 import (
-	"funch/cmd"
+	"github.com/yukiisen/funch/cmd"
 	"github.com/spf13/cobra"
 )
 
