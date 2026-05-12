@@ -3,13 +3,14 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"github.com/yukiisen/funch/api"
-	"github.com/yukiisen/funch/config"
 	"os"
 	"path/filepath"
-	"time"
 	"strings"
+	"time"
+
 	"github.com/spf13/cobra"
+	"github.com/yukiisen/funch/api"
+	"github.com/yukiisen/funch/config"
 )
 
 var AddCmd = &cobra.Command {
@@ -23,6 +24,7 @@ var AddCmd = &cobra.Command {
 func add(cmd *cobra.Command, args []string) error {
 	name, exec := args[0], args[1]
 
+	// fix pathname
 	if strings.HasPrefix(args[1], "~") {
 		home, _ := os.UserHomeDir()
 		exec = filepath.Join(home, exec[1:])
@@ -42,7 +44,15 @@ func add(cmd *cobra.Command, args []string) error {
 
 	fmt.Println("Fetching Game metadata...")
 	game, err := rawg.GetGame(name)
-	if err != nil { return err }
+	if err != nil { 
+		fmt.Println("Error: ", err)  
+		game.Name = strings.ReplaceAll(name, " ", "-")
+		game.DisplayName = name
+		game.Website = ""
+		game.Genres = []string{}
+		game.Platforms = []string{}
+		game.Stores = []string{}
+	}
 
 	game.Args = []string{}
 	game.Executable = exec

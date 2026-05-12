@@ -35,7 +35,7 @@ func info(cmd *cobra.Command, args []string) error {
 	fmt.Fprintf(w, "Launcher\t%s\n", g.Launcher)
 	fmt.Fprintf(w, "Executable\t%s\n", g.Executable)
 	fmt.Fprintf(w, "Installed\t%s\n", g.Installed.Format("2006-01-02"))
-	fmt.Fprintf(w, "Playtime\t%dh\n", g.Playtime / 3600)
+	fmt.Fprintf(w, "Playtime\t%s\n", playtime(g.Playtime))
 
 	fmt.Fprintf(w, "Genres\t%s\n", strings.Join(g.Genres, ", "))
 	fmt.Fprintf(w, "Platforms\t%s\n", strings.Join(g.Platforms, ", "))
@@ -48,6 +48,9 @@ func info(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+func playtime(time int64) string {
+	return fmt.Sprintf("%dh %dmin", (time / 3600), (time % 3600) / 60)
+}
 
 // matches game against name if none then display name if none then id
 func getGame(name string, games []Game) (*Game, error) {
