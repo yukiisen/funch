@@ -109,7 +109,7 @@ func run(cmd *cobra.Command, args []string) error {
 		}
 
 
-		if err := startRPC(game, lib.Config.RPCShowPlaytime); err != nil {
+		if err := startRPC(game, time.Now(), lib.Config.RPCShowPlaytime); err != nil {
 			log.Println("RPC Error: ", err)
 		}
 	}
@@ -165,9 +165,7 @@ func getGameInteractive(games []Game, command []string) *Game {
 	return nil
 }
 
-func startRPC(game *Game, showTime bool) error {
-	startTime := time.Now()
-
+func startRPC(game *Game, startTime time.Time, showTime bool) error {
 	var state string
 
 	if showTime {
