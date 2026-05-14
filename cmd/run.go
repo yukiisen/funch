@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/yukiisen/funch/api"
-	"github.com/yukiisen/funch/config"
 	"log"
 	"os/exec"
 	"strconv"
@@ -14,7 +12,9 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/hugolgst/rich-go/client"
+	"github.com/yukiisen/funch/api"
+	"github.com/yukiisen/funch/config"
+	"github.com/yukiisen/funch/discord"
 	"github.com/spf13/cobra"
 )
 
@@ -101,15 +101,16 @@ func run(cmd *cobra.Command, args []string) error {
 	no_rpc, err := cmd.Flags().GetBool("no-rpc")  
 	if err != nil { return err }
 
+	client := discord.Client {}
+
 	if lib.Config.RPCEnabled && !no_rpc {
-		if err := client.Login(RPCAppID); err != nil {
+		if err := client.Connect(RPCAppID); err != nil {
 			log.Println("RPC Error: ", err)
 		} else {
-			defer client.Logout()
+			defer client.Close()
 		}
 
-
-		if err := startRPC(game, time.Now(), lib.Config.RPCShowPlaytime); err != nil {
+		if err := startRPC(&client, game, time.Now(), lib.Config.RPCShowPlaytime); err != nil {
 			log.Println("RPC Error: ", err)
 		}
 	}
@@ -165,7 +166,7 @@ func getGameInteractive(games []Game, command []string) *Game {
 	return nil
 }
 
-func startRPC(game *Game, startTime time.Time, showTime bool) error {
+func startRPC(client *discord.Client, game *Game, startTime time.Time, showTime bool) error {
 	var state string
 
 	if showTime {
@@ -174,24 +175,26 @@ func startRPC(game *Game, startTime time.Time, showTime bool) error {
 		state = ""
 	}
 
-	return client.SetActivity(client.Activity {
+	return client.SetActivity(&discord.Activity{ 
 		State:      state,
 		Details:    "Playing " + game.DisplayName,
 
-		LargeImage: "funch",
-		LargeText:  game.DisplayName,
+		Assets: &discord.Assets{
+			LargeImage: game.Covers[game.Cover],
+			LargeText:  game.DisplayName,
 
-		SmallImage: game.Launcher,
-		SmallText:  "Via " + game.Launcher,
-
-		Timestamps: &client.Timestamps{
-			Start: &startTime,
+			SmallImage: game.Launcher,
+			SmallText:  "Via " + game.Launcher,
 		},
 
-		Buttons: []*client.Button{
+		Timestamps: &discord.Timestamps{
+			Start: startTime.Unix(),
+		},
+
+		Buttons: []*discord.Button{
 			{
 				Label: "Website",
-				Url:   game.Website,
+				URL:   game.Website,
 			},
 		},
 	})

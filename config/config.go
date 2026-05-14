@@ -20,6 +20,7 @@ type Config struct {
 	RPCShowPlaytime bool
 	Daemonize bool
 	APIKey string
+	CoversKey string
 	FuzzyFinderCmd []string
 }
 

@@ -18,5 +18,6 @@ func main() {
 	rootCmd.AddCommand(cmd.SetCmd)
 	rootCmd.AddCommand(cmd.ListCmd)
 	rootCmd.AddCommand(cmd.InfoCmd)
+	rootCmd.AddCommand(cmd.SyncCmd)
 	rootCmd.Execute()
 }

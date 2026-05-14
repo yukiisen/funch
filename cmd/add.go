@@ -41,6 +41,7 @@ func add(cmd *cobra.Command, args []string) error {
 	if stat.IsDir() { return errors.New("Executable must be a file") }
 
 	rawg := api.RAWG { Key: lib.Config.APIKey }
+	sgdb := api.SGDB { Key: lib.Config.CoversKey }
 
 	fmt.Println("Fetching Game metadata...")
 	game, err := rawg.GetGame(name)
@@ -59,6 +60,15 @@ func add(cmd *cobra.Command, args []string) error {
 	game.Installed = time.Now()
 	game.Playtime = 0
 	game.Launcher = getLauncher(exec)
+
+	urls, err := sgdb.GetGameIcons(game.DisplayName)
+
+	if err == nil { 
+		game.Covers = urls
+		game.Cover = 0
+	} else {
+		fmt.Println("Error: ", err)  
+	}
 
 	lib.Games = append(lib.Games, game)
 

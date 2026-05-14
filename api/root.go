@@ -9,6 +9,8 @@ type Game struct {
 	Platforms      []string  `toml:"platforms"`
 	Stores         []string  `toml:"stores"`
 	Website        string    `toml:"website"`
+	Covers		   []string  `toml:"covers"`
+	Cover          int       `toml:"cover"`
 	Launcher       string    `toml:"launcher"`
 	Args           []string  `toml:"args"`
 	Executable     string    `toml:"executable"`
