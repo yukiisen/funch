@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 type SGDB struct {
@@ -48,7 +49,23 @@ func (self *SGDB) GetGameIcons(name string) ([]string, error) {
 	ret := []string{}
 
 	for _, d := range grids.Data {
-		ret = append(ret, d.URL)
+		if strings.HasSuffix(d.URL, ".png") || strings.HasSuffix(d.URL, ".jpg") {
+			ret = append(ret, d.URL)
+		}
+	}
+
+	if len(ret) == 0 {
+		url = fmt.Sprintf("https://www.steamgriddb.com/api/v2/logos/game/%d", id)
+		grids := SGDBGridResult {}
+
+		err = requestJsonAuth(url, self.Key, &grids);
+		if err != nil { return nil, err }
+
+		for _, d := range grids.Data {
+			if strings.HasSuffix(d.URL, ".png") || strings.HasSuffix(d.URL, ".jpg") {
+				ret = append(ret, d.URL)
+			}
+		}
 	}
 
 	return ret, nil

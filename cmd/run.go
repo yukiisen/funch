@@ -73,7 +73,7 @@ func run(cmd *cobra.Command, args []string) error {
 	if (len(args) == 0)  {
 		game = getGameInteractive(lib.Games, lib.Config.FuzzyFinderCmd)
 		if game == nil {
-			return errors.New("Not Game Selected")
+			return errors.New("No Game Selected")
 		}
 	} else {
 		game, err = getGame(args[0], lib.Games)
@@ -108,10 +108,9 @@ func run(cmd *cobra.Command, args []string) error {
 			log.Println("RPC Error: ", err)
 		} else {
 			defer client.Close()
-		}
-
-		if err := startRPC(&client, game, time.Now(), lib.Config.RPCShowPlaytime); err != nil {
-			log.Println("RPC Error: ", err)
+			if err := startRPC(&client, game, time.Now(), lib.Config.RPCShowPlaytime); err != nil {
+				log.Println("RPC Error: ", err)
+			}
 		}
 	}
 	
@@ -180,7 +179,7 @@ func startRPC(client *discord.Client, game *Game, startTime time.Time, showTime 
 		Details:    "Playing " + game.DisplayName,
 
 		Assets: &discord.Assets{
-			LargeImage: game.Covers[game.Cover],
+			LargeImage: game.Icons[game.IconIdx],
 			LargeText:  game.DisplayName,
 
 			SmallImage: game.Launcher,
@@ -203,8 +202,8 @@ func startRPC(client *discord.Client, game *Game, startTime time.Time, showTime 
 func buildLaunchCommand(game *Game) (*exec.Cmd, error) {
 	switch game.Launcher {
 	case "wine", "sh", "love":
-		args := append([]string{game.Executable}, game.Args...)
-		return exec.Command(game.Launcher, args...), nil
+		args := append([]string{"--net=none", game.Executable}, game.Args...)
+		return exec.Command("firejail", args...), nil
 
 	case "lutris":
 		args := append([]string{"lutris:game/" + game.Executable}, game.Args...)

@@ -21,14 +21,14 @@ func sync(cmd *cobra.Command, args []string) error {
 
 
 	for i, g := range lib.Games {
-		if len(g.Covers) == 0 {
+		if len(g.Icons) == 0 {
 			fmt.Printf("Syncing %s\n", g.DisplayName)
 
 			urls, err := sgdb.GetGameIcons(g.DisplayName)
 			if err != nil { return err }
 			
-			lib.Games[i].Covers = urls
-			lib.Games[i].Cover = 0
+			lib.Games[i].Icons = urls
+			lib.Games[i].IconIdx = 0
 		}
 	}
 

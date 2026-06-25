@@ -64,8 +64,8 @@ func add(cmd *cobra.Command, args []string) error {
 	urls, err := sgdb.GetGameIcons(game.DisplayName)
 
 	if err == nil { 
-		game.Covers = urls
-		game.Cover = 0
+		game.Icons = urls
+		game.IconIdx = 0
 	} else {
 		fmt.Println("Error: ", err)  
 	}
